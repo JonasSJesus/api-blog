@@ -92,62 +92,62 @@ class BlogController extends Controller
 
     public function showByCategory(string $category)
     {
-        try {
-            $article = Blog::where('category', $category)->firstOrFail();
+        $articles = Blog::where('category', $category)->get();
 
-            return response()->json([
-                'status' => 'sucesso',
-                'mensagem' => 'Artigos encontrados',
-                'dados' => $article
-            ], 200);
-
-        } catch (ModelNotFoundException $e) {
+        if ($articles->isEmpty()) {
             return response()->json([
                 'status' => 'erro',
-                'mensagem' => 'Nenhum artigo encontrado',
-                'dados' => $e->getMessage()
+                'mensagem' => 'Nenhum artigo encontrado para esta categoria',
+                'dados' => []
             ], 404);
         }
+
+        return response()->json([
+            'status' => 'sucesso',
+            'mensagem' => 'Artigos encontrados',
+            'total' => $articles->count(),
+            'dados' => $articles
+        ], 200);
     }
 
     public function showByTitle(string $title)
     {
-        try {
-            $article = Blog::where('title', $title)->firstOrFail();
+        $articles = Blog::where('title', $title)->get();
 
-            return response()->json([
-                'status' => 'sucesso',
-                'mensagem' => 'Artigos encontrados',
-                'dados' => $article
-            ], 200);
-
-        } catch (ModelNotFoundException $e) {
+        if ($articles->isEmpty()) {
             return response()->json([
                 'status' => 'erro',
-                'mensagem' => 'Nenhum artigo encontrado',
-                'dados' => $e->getMessage()
+                'mensagem' => 'Nenhum artigo encontrado para este titulo',
+                'dados' => []
             ], 404);
         }
+
+        return response()->json([
+            'status' => 'sucesso',
+            'mensagem' => 'Artigos encontrados',
+            'total' => $articles->count(),
+            'dados' => $articles
+        ], 200);
     }
 
     public function showByAuthor(string $author)
     {
-        try {
-            $article = Blog::where('author', $author)->firstOrFail();
+        $articles = Blog::where('author', $author)->get();
 
-            return response()->json([
-                'status' => 'sucesso',
-                'mensagem' => 'Artigos encontrados',
-                'dados' => $article
-            ], 200);
-
-        } catch (ModelNotFoundException $e) {
+        if ($articles->isEmpty()) {
             return response()->json([
                 'status' => 'erro',
-                'mensagem' => 'Nenhum artigo encontrado',
-                'dados' => $e->getMessage()
+                'mensagem' => 'Nenhum artigo encontrado para este autor',
+                'dados' => []
             ], 404);
         }
+
+        return response()->json([
+            'status' => 'sucesso',
+            'mensagem' => 'Artigos encontrados',
+            'total' => $articles->count(),
+            'dados' => $articles
+        ], 200);
     }
 
     /**
