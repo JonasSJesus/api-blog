@@ -93,7 +93,7 @@ class BlogController extends Controller
     public function showByCategory(string $category)
     {
         try {
-            $article = Blog::where('category', $category)->get();
+            $article = Blog::where('category', $category)->firstOrFail();
 
             return response()->json([
                 'status' => 'sucesso',
@@ -113,7 +113,7 @@ class BlogController extends Controller
     public function showByTitle(string $title)
     {
         try {
-            $article = Blog::where('title', $title)->get();
+            $article = Blog::where('title', $title)->firstOrFail();
 
             return response()->json([
                 'status' => 'sucesso',
@@ -133,7 +133,7 @@ class BlogController extends Controller
     public function showByAuthor(string $author)
     {
         try {
-            $article = Blog::where('author', $author)->get();
+            $article = Blog::where('author', $author)->firstOrFail();
 
             return response()->json([
                 'status' => 'sucesso',
@@ -155,12 +155,22 @@ class BlogController extends Controller
      */
     public function update(Request $request, string $id)
     {
-        $validatedData = $request->validate([
+        $validator = Validator::make($request->all(), [
             'title' => 'required|max:30',
             'author' => 'required|email',
             'content' => 'required',
             'category' => 'required'
         ]);
+
+        if ($validator->fails()) {
+            return response()->json([
+                'status' => 'erro',
+                'mensagem' => 'Dados inválidos',
+                'erros' => $validator->errors()
+            ], 422);
+        }
+
+        $validatedData = $validator->validated();
 
         $article = Blog::findOrFail($id);
 
