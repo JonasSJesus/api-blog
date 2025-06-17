@@ -196,9 +196,6 @@ class BlogController extends Controller
 
         $article->delete();
 
-        return response()->json([
-            'status' => 'sucesso',
-            'mensagem' => 'Post deletado com sucesso',
-        ], 204);
+        return response()->json(status: 204);
     }
 }
